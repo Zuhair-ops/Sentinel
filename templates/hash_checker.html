@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>File Hash Checker | Sentinel</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <h1>#️⃣ File Hash Checker</h1>
+        <p>Calculate and verify cryptographic hashes locally</p>
+    </header>
+
+    <main class="tool-container">
+
+        <form method="POST"
+              action="{{ url_for('hash_checker') }}"
+              enctype="multipart/form-data">
+
+            <label for="file">
+                Select a file:
+            </label>
+
+            <input
+                type="file"
+                id="file"
+                name="file"
+                required
+            >
+
+            <label for="expected_hash">
+                Expected SHA-256 hash:
+            </label>
+
+            <input
+                type="text"
+                id="expected_hash"
+                name="expected_hash"
+                placeholder="Paste SHA-256 hash here (optional)"
+            >
+
+            <button type="submit">
+                Calculate & Verify
+            </button>
+
+        </form>
+
+        {% if result %}
+
+        <div class="result">
+
+            <h2>📄 File Information</h2>
+
+            <p>
+                <strong>Name:</strong>
+                {{ result.filename }}
+            </p>
+
+            <p>
+                <strong>Size:</strong>
+                {{ result.size }}
+            </p>
+
+            <hr>
+
+            <h2>🔐 Cryptographic Hashes</h2>
+
+            <div class="hash-result">
+                <h3>SHA-256</h3>
+                <code>{{ result.sha256 }}</code>
+            </div>
+
+            <div class="hash-result">
+                <h3>SHA-512</h3>
+                <code>{{ result.sha512 }}</code>
+            </div>
+
+            <div class="hash-result">
+                <h3>MD5</h3>
+                <code>{{ result.md5 }}</code>
+                <p class="hash-warning">
+                    ⚠️ MD5 is provided for legacy/integrity purposes
+                    and should not be used for security-sensitive
+                    applications.
+                </p>
+            </div>
+
+            {% if result.expected_hash %}
+
+            <div class="verification-result">
+
+                <h2>🛡️ Integrity Verification</h2>
+
+                {% if result.verification %}
+
+                    <div class="verification-success">
+                        🟢 MATCH
+                    </div>
+
+                    <p>
+                        The calculated SHA-256 hash matches the
+                        expected hash.
+                    </p>
+
+                {% else %}
+
+                    <div class="verification-failure">
+                        🔴 MISMATCH
+                    </div>
+
+                    <p>
+                        The calculated SHA-256 hash does not match
+                        the expected hash.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+            {% endif %}
+
+            <p class="note">
+                The file is processed locally by Sentinel.
+                It is not stored by the application.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+        <a href="/" class="back-link">
+            ← Back to Sentinel
+        </a>
+
+    </main>
+
+</body>
+
+</html>

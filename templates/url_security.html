@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>URL Security | Sentinel</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <h1>🔗 URL Security</h1>
+        <p>Analyze URLs for structural security indicators</p>
+    </header>
+
+    <main class="tool-container">
+
+        <form method="POST"
+              action="{{ url_for('url_security') }}">
+
+            <label for="url">
+                Enter a URL:
+            </label>
+
+            <input
+                type="text"
+                id="url"
+                name="url"
+                placeholder="https://example.com"
+                required
+            >
+
+            <button type="submit">
+                Analyze URL
+            </button>
+
+        </form>
+
+        {% if result %}
+
+        <div class="result">
+
+            {% if result.valid %}
+
+            <h2>🔎 URL Analysis</h2>
+
+            <p>
+                <strong>URL:</strong>
+                {{ result.url }}
+            </p>
+
+            <p>
+                <strong>Domain:</strong>
+                {{ result.domain }}
+            </p>
+
+            <p>
+                <strong>HTTPS:</strong>
+
+                {% if result.https %}
+                    🟢 Enabled
+                {% else %}
+                    🔴 Not enabled
+                {% endif %}
+
+            </p>
+
+            <hr>
+
+            <h2>🛡️ Security Assessment</h2>
+
+            <div class="url-risk url-risk-{{ result.risk|lower }}">
+                {{ result.risk }} Risk Indicators
+            </div>
+
+            <p class="risk-score">
+                Security indicator score:
+                <strong>{{ result.score }}</strong>
+            </p>
+
+            <h3>Security Indicators</h3>
+            
+
+            <ul class="security-indicators">
+
+    {% for indicator in result.indicators %}
+
+        <li>
+
+            <strong>
+                {{ indicator }}
+            </strong>
+
+            {% if result.explanations %}
+                <p class="indicator-explanation">
+                    {{ result.explanations[loop.index0] }}
+                </p>
+            {% endif %}
+
+        </li>
+
+    {% endfor %}
+
+</ul>
+
+            {% else %}
+
+            <h2>⚠️ Invalid URL</h2>
+
+            <ul class="security-indicators">
+
+                {% for indicator in result.indicators %}
+
+                    <li>
+                        {{ indicator }}
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+
+            {% endif %}
+
+            <p class="note">
+                This tool analyzes URL structure for basic security
+                indicators. It does not verify website ownership,
+                scan website content, or guarantee that a URL is
+                safe or malicious.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+        <a href="/" class="back-link">
+            ← Back to Sentinel
+        </a>
+
+    </main>
+
+</body>
+
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Security Logs | Sentinel</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <h1>📋 Security Logs</h1>
+        <p>Sentinel activity history</p>
+    </header>
+
+    <main class="tool-container">
+
+        <div class="result">
+
+            <h2>🛡️ Security Logs</h2>
+            <div class="log-filter">
+
+    <label for="log-filter">
+        Filter:
+    </label>
+
+    <select id="log-filter">
+        <option value="all">All Results</option>
+        <option value="safe">Safe</option>
+        <option value="warning">Warnings</option>
+        <option value="danger">Security Events</option>
+    </select>
+
+</div>
+
+            {% if logs %}
+
+                {% for log in logs|reverse %}
+
+                    <div
+    class="log-entry"
+    data-result="{{ log.result }}"
+>
+
+                        <h3>{{ log.action }}</h3>
+
+                        <p>
+                            <strong>Time:</strong>
+                            {{ log.timestamp }}
+                        </p>
+
+                        <p>
+                            <strong>Target:</strong>
+                            {{ log.target }}
+                        </p>
+
+                        <p>
+                            <strong>Result:</strong>
+                            {{ log.result }}
+                        </p>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <h3>No logs yet</h3>
+
+                <p>
+                    Sentinel hasn't recorded any security
+                    activity yet.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+        <a href="/" class="back-link">
+            ← Back to Sentinel
+        </a>
+
+    </main>
+<script>
+
+const logFilter = document.getElementById("log-filter");
+const logEntries = document.querySelectorAll(".log-entry");
+
+logFilter.addEventListener("change", function () {
+
+    const selected = logFilter.value;
+
+    logEntries.forEach(function (entry) {
+
+        const result = entry.dataset.result;
+
+        let category = "neutral";
+
+        if (
+            ["Low", "MATCH", "Strong", "Very Strong"].includes(result)
+        ) {
+            category = "safe";
+        }
+
+        else if (
+            ["Moderate", "Weak"].includes(result)
+        ) {
+            category = "warning";
+        }
+
+        else if (
+            ["Elevated", "MISMATCH", "Very Weak"].includes(result)
+        ) {
+            category = "danger";
+        }
+
+        let showEntry = false;
+
+if (selected === "all") {
+    showEntry = true;
+}
+
+else if (selected === "safe" && category === "safe") {
+    showEntry = true;
+}
+
+else if (selected === "warning" && category === "warning") {
+    showEntry = true;
+}
+
+else if (
+    selected === "danger" &&
+    (category === "warning" || category === "danger")
+) {
+    showEntry = true;
+}
+
+entry.style.display = showEntry ? "" : "none";
+
+    });
+
+});
+
+</script>
+</body>
+
+</html>

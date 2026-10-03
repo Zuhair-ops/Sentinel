@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sentinel | Cybersecurity Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700&display=swap"
+    rel="stylesheet"
+>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <h1>🛡️ Sentinel</h1>
+        <p>Personal Cybersecurity Dashboard</p>
+        <div class="system-status">
+    <span class="status-dot"></span>
+    SYSTEM ONLINE
+</div>
+    </header>
+    <!-- Dashboard Statistics -->
+
+<section class="stats-container">
+
+    <div class="stat-card">
+        <h3>🔍 Total Scans</h3>
+        <p>{{ stats.total_scans }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>🌐 URL Scans</h3>
+        <p>{{ stats.url_scans }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>📄 File Scans</h3>
+        <p>{{ stats.file_scans }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>⚠️ Security Events</h3>
+        <p>{{ stats.security_events }}</p>
+    </div>
+
+</section>
+<!-- Recent Security Activity -->
+
+<section class="recent-activity">
+
+    <div class="activity-header">
+        <h2>📋 Recent Activity</h2>
+
+        <a href="{{ url_for('security_logs') }}">
+            View All Logs →
+        </a>
+    </div>
+
+    {% if recent_logs %}
+
+        <div class="activity-list">
+
+            {% for log in recent_logs %}
+
+                <div class="activity-item">
+
+                    <div class="activity-info">
+
+                        <strong>
+                            {{ log.action }}
+                        </strong>
+
+                        <span>
+                            {{ log.target }}
+                        </span>
+
+                    </div>
+
+                    <div class="activity-result">
+
+    <span class="activity-status
+        {% if log.result in ['Low', 'MATCH', 'Strong', 'Very Strong'] %}
+            status-safe
+        {% elif log.result in ['Moderate', 'Weak'] %}
+            status-warning
+        {% elif log.result in ['Elevated', 'MISMATCH', 'Very Weak'] %}
+            status-danger
+        {% else %}
+            status-neutral
+        {% endif %}
+    ">
+        {{ log.result }}
+    </span>
+
+    <small>
+        {{ log.timestamp }}
+    </small>
+
+</div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-activity">
+            No security activity recorded yet.
+        </div>
+
+    {% endif %}
+
+</section>
+
+    <main>
+
+        <div class="dashboard">
+
+            <div class="card">
+                <h2>🔑 Password Security</h2>
+                <p>Analyze password strength.</p>
+ <a href="{{ url_for('password_checker') }}" class="tool-button">
+    Open Tool
+</a>
+
+            </div>
+
+            <div class="card">
+    <h2>#️⃣ File Hash Checker</h2>
+    <p>Calculate and verify file hashes.</p>
+
+    <a href="{{ url_for('hash_checker') }}" class="tool-button">
+    Open Tool
+</a>
+</div>
+
+            <div class="card">
+    <h2>🔗 URL Security</h2>
+    <p>Analyze URLs for basic security indicators.</p>
+
+    <a href="{{ url_for('url_security') }}" class="tool-button">
+        Open Tool
+    </a>
+</div>
+
+            <div class="card">
+
+    <h2>📋 Security Logs</h2>
+
+    <p>View security activity.</p>
+
+    <a href="{{ url_for('security_logs') }}" class="tool-button">
+    Open Tool
+</a>
+
+</div>
+
+        </div>
+
+    </main>
+
+</body>
+</html>
