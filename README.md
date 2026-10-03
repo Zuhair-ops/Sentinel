@@ -94,15 +94,59 @@ Sentinel/
     ├── url_checker.py
     └── log_manager.py
 
-    ---
+```
+
+---
 
 ## 📸 Screenshots
 
-### Dashboard
+### 📊 Dashboard
 
-The Sentinel dashboard provides an overview of security scans, recent activity, and available security tools.
+The Sentinel dashboard provides an overview of security scans, recent activity, security events, and available security tools.
 
-> Screenshots will be added here after the final UI review.
+![Sentinel Dashboard](screenshots/Dashboard.png)
+
+![Dashboard Activity](screenshots/Dashboard-2.png)
+
+![Security Tools](screenshots/Dashboard-3.png)
+
+---
+
+### 🔐 Password Security
+
+The password analyzer provides live strength feedback, entropy estimation, theoretical brute-force estimates, and improvement suggestions.
+
+![Password Security](screenshots/Password-security.png)
+
+![Live Password Analysis](screenshots/password-security-2.png)
+
+![Password Analysis Results](screenshots/password-checker-3.png)
+
+---
+
+### #️⃣ File Hash Checker
+
+The file hash checker calculates SHA-256, SHA-512, and MD5 hashes and supports SHA-256 integrity verification.
+
+![File Hash Checker](screenshots/hash-checker.png)
+
+![Cryptographic Hashes](screenshots/hash-checker-2.png)
+
+![Hash Integrity Verification](screenshots/hash-checker-3.png)
+
+---
+
+### 🔗 URL Security
+
+The URL security analyzer examines URL structure for configured security indicators and provides explanations for detected findings.
+
+![URL Security](screenshots/url.png)
+
+![URL Analysis](screenshots/url-2.png)
+
+![URL Security Indicators](screenshots/url-3.png)
+
+---
 
 ### Password Security
 
@@ -115,9 +159,7 @@ Calculates SHA-256, SHA-512, and MD5 hashes and provides SHA-256 integrity verif
 ### URL Security
 
 Analyzes URL structure for security indicators and provides explanations for detected findings.
-
 ---
-
 ## 🔮 Future Improvements
 
 Potential future enhancements include:
